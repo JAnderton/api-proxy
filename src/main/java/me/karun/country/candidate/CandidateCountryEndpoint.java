@@ -20,6 +20,7 @@ public class CandidateCountryEndpoint {
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
   @ResponsePayload
   public GetCountryResponse getCountryV1(@RequestPayload final GetCountryRequest request) {
+    System.out.println(">> Candidate endpoint triggered");
     final GetCountryResponse response = new GetCountryResponse();
     oldRepository.findCountry(request.getName())
       .ifPresent(response::setCountry);

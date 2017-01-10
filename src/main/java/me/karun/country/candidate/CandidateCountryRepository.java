@@ -33,6 +33,8 @@ public class CandidateCountryRepository {
       .filter(c -> name.equals(c.getName()))
       .findFirst();
     if (result.isPresent() && numberProvider.fetchRandomNumber() > 0.5) {
+      System.out.println(">>> Candidate is returning a defective result");
+
       result.get().setCapital("Invalid value");
     }
     return result;
