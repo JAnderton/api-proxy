@@ -1,4 +1,4 @@
-package me.karun.country;
+package me.karun.country.candidate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -8,20 +8,20 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 @Endpoint
 public class CountryEndpoint {
-  private static final String NAMESPACE_URI = "http://karun.me/country";
+  private static final String NAMESPACE_URI = "http://karun.me/country/v2";
 
-  private final CountryRepository countryRepository;
+  private final CountryRepository oldRepository;
 
   @Autowired
-  public CountryEndpoint(final CountryRepository countryRepository) {
-    this.countryRepository = countryRepository;
+  public CountryEndpoint(final CountryRepository oldRepository) {
+    this.oldRepository = oldRepository;
   }
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
   @ResponsePayload
-  public GetCountryResponse getCountry(@RequestPayload final GetCountryRequest request) {
+  public GetCountryResponse getCountryV1(@RequestPayload final GetCountryRequest request) {
     final GetCountryResponse response = new GetCountryResponse();
-    countryRepository.findCountry(request.getName())
+    oldRepository.findCountry(request.getName())
       .ifPresent(response::setCountry);
 
     return response;

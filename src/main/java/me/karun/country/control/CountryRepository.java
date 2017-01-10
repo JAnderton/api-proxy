@@ -1,4 +1,4 @@
-package me.karun.country;
+package me.karun.country.control;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static me.karun.country.Currency.*;
+import static me.karun.country.control.Currency.*;
+
 
 @Component
 public class CountryRepository {
