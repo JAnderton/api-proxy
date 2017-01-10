@@ -1,2 +1,2 @@
 #!/bin/sh
-curl --header "content-type: text/xml" -d @input.xml http://localhost:8080/ws | xmllint --format -
+curl -s --header "content-type: text/xml" -d @src/test/resources/input.xml http://localhost:8080/ws | xmllint --format -
