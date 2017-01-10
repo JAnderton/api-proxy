@@ -42,19 +42,14 @@ public class ProxyEndpoint {
       .map(e -> e.getKey() + " => " + metricToString(e.getValue()))
       .collect(Collectors.joining(lineSeparator()));
 
-    final String meters = registry.getMeters().entrySet().stream()
-      .map(e -> e.getKey() + " => " + metricToString(e.getValue()))
-      .collect(Collectors.joining(lineSeparator()));
-
-
-    return String.format("Metrics:%s%s%sMeters:%s%s", lineSeparator(), metrics, lineSeparator(), lineSeparator(), meters);
+    return "Metrics:" + lineSeparator() + metrics;
   }
 
   private String metricToString(final Metric value) {
     if (value instanceof Timer) {
-      return "count=" + ((Timer) value).getCount() + ",mean=" + ((Timer) value).getMeanRate();
+      return "{count=" + ((Timer) value).getCount() + ", mean=" + ((Timer) value).getMeanRate() + "}";
     } else if (value instanceof Counter) {
-      return "count=" + ((Counter) value).getCount();
+      return "{count=" + ((Counter) value).getCount() + "}";
     }
     return value.toString();
   }
