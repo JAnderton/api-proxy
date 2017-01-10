@@ -7,5 +7,86 @@
   <groupId>me.karun</groupId>
   <artifactId>api-proxy</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
+  <name>api-proxy</name>
+  <description>Proxies API requests and experiments between refactored instances</description>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.4.3.RELEASE</version>
+    <relativePath/>
+  </parent>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <wsdl4j.version>1.6.3</wsdl4j.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web-services</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>wsdl4j</groupId>
+      <artifactId>wsdl4j</artifactId>
+      <version>1.6.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.6.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.5</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>xjc</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>${project.basedir}/src/main/resources/</schemaDirectory>
+          <outputDirectory>${project.build.directory}/generated-sources/xjc</outputDirectory>
+          <clearOutputDir>true</clearOutputDir>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>
