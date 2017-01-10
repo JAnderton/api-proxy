@@ -10,9 +10,8 @@ import java.util.Optional;
 
 import static me.karun.country.control.Currency.*;
 
-
 @Component
-public class CountryRepository {
+public class ControlCountryRepository {
   private final List<Country> countries = new ArrayList<>();
 
   @PostConstruct

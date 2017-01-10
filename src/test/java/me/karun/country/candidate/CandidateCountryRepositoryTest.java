@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CountryRepositoryTest {
-  private CountryRepository repository;
+public class CandidateCountryRepositoryTest {
+  private CandidateCountryRepository repository;
   @Mock
   private NumberProvider numberProvider;
 
   @Before
   public void setUp() throws Exception {
-    repository = new CountryRepository(numberProvider);
+    repository = new CandidateCountryRepository(numberProvider);
     repository.initData();
   }
 

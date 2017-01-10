@@ -1,5 +1,5 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:gs="http://karun.me/proxy">
+                  xmlns:gs="http://karun.me/country/candidate">
   <soapenv:Header/>
   <soapenv:Body>
     <gs:getCountryRequest>

@@ -11,11 +11,11 @@ import java.util.Optional;
 import static me.karun.country.candidate.Currency.*;
 
 @Component
-public class CountryRepository {
+public class CandidateCountryRepository {
   private final List<Country> countries = new ArrayList<>();
   private final NumberProvider numberProvider;
 
-  CountryRepository(final NumberProvider numberProvider) {
+  CandidateCountryRepository(final NumberProvider numberProvider) {
     this.numberProvider = numberProvider;
   }
 

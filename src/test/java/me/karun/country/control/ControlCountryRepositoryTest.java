@@ -12,12 +12,12 @@ import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CountryRepositoryTest {
-  private CountryRepository repository;
+public class ControlCountryRepositoryTest {
+  private ControlCountryRepository repository;
 
   @Before
   public void setUp() throws Exception {
-    repository = new CountryRepository();
+    repository = new ControlCountryRepository();
     repository.initData();
   }
 

@@ -7,13 +7,13 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 @Endpoint
-public class CountryEndpoint {
-  private static final String NAMESPACE_URI = "http://karun.me/country/v1";
+public class ControlCountryEndpoint {
+  private static final String NAMESPACE_URI = "http://karun.me/country/control";
 
-  private final CountryRepository oldRepository;
+  private final ControlCountryRepository oldRepository;
 
   @Autowired
-  public CountryEndpoint(final CountryRepository oldRepository) {
+  public ControlCountryEndpoint(final ControlCountryRepository oldRepository) {
     this.oldRepository = oldRepository;
   }
 
