@@ -2,17 +2,27 @@ package me.karun.country.proxy;
 
 import com.codahale.metrics.*;
 import com.github.rawls238.scientist4j.Experiment;
+import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
 
 class MetricsEngine {
   private final MetricRegistry registry = new MetricRegistry();
-  private final JmxReporter jmxReporter = JmxReporter.forRegistry(registry).build();
 
   Experiment<String> createExperiment(final String name) {
-    jmxReporter.start();
+    JmxReporter.forRegistry(registry)
+      .build()
+      .start();
+    Slf4jReporter.forRegistry(registry)
+      .outputTo(LoggerFactory.getLogger(MetricsEngine.class))
+      .convertRatesTo(TimeUnit.SECONDS)
+      .convertDurationsTo(TimeUnit.MILLISECONDS)
+      .build()
+      .start(5, TimeUnit.SECONDS);
+
     return new ToggleAwareExperiment<>(name, registry);
   }
 
