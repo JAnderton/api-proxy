@@ -1,10 +1,5 @@
 package me.karun.country.proxy;
 
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Metric;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
-import com.github.rawls238.scientist4j.Experiment;
 import org.apache.http.protocol.HTTP;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,10 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 import static java.lang.System.currentTimeMillis;
-import static java.lang.System.lineSeparator;
 import static me.karun.country.proxy.ExperimentType.CANDIDATE;
 import static me.karun.country.proxy.ExperimentType.CONTROL;
 import static org.apache.commons.io.FileUtils.readFileToString;
@@ -26,32 +19,19 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 @RequestMapping("/proxy")
 public class ProxyEndpoint {
 
-  private final MetricRegistry registry = new MetricRegistry();
+  private final MetricsEngine metricEngine = new MetricsEngine();
 
   @RequestMapping(method = RequestMethod.GET, produces = MediaType.TEXT_XML_VALUE)
   @ResponseBody
   public String proxyRequest() throws Exception {
-    return new Experiment<String>("getCountry", registry)
+    return metricEngine.createExperiment("getCountry")
       .run(this::controlFunction, this::candidateFunction);
   }
 
   @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, value = "/metrics")
   @ResponseBody
   public String experimentResult() throws Exception {
-    final String metrics = registry.getMetrics().entrySet().stream()
-      .map(e -> e.getKey() + " => " + metricToString(e.getValue()))
-      .collect(Collectors.joining(lineSeparator()));
-
-    return "Metrics:" + lineSeparator() + metrics;
-  }
-
-  private String metricToString(final Metric value) {
-    if (value instanceof Timer) {
-      return "{count=" + ((Timer) value).getCount() + ", mean=" + ((Timer) value).getMeanRate() + "}";
-    } else if (value instanceof Counter) {
-      return "{count=" + ((Counter) value).getCount() + "}";
-    }
-    return value.toString();
+    return metricEngine.formattedText();
   }
 
   private String controlFunction() {
