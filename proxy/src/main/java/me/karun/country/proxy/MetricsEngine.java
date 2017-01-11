@@ -1,9 +1,6 @@
 package me.karun.country.proxy;
 
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Metric;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
+import com.codahale.metrics.*;
 import com.github.rawls238.scientist4j.Experiment;
 
 import java.util.stream.Collectors;
@@ -12,8 +9,10 @@ import static java.lang.System.lineSeparator;
 
 class MetricsEngine {
   private final MetricRegistry registry = new MetricRegistry();
+  private final JmxReporter jmxReporter = JmxReporter.forRegistry(registry).build();
 
   Experiment<String> createExperiment(final String name) {
+    jmxReporter.start();
     return new ToggleAwareExperiment<>(name, registry);
   }
 
