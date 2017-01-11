@@ -2,6 +2,8 @@ package me.karun.country.control;
 
 import me.karun.country.GetCountryRequest;
 import me.karun.country.GetCountryResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -13,6 +15,7 @@ import static java.lang.System.currentTimeMillis;
 @Endpoint
 public class ControlCountryEndpoint {
   private static final String NAMESPACE_URI = "http://karun.me/country";
+  private final Logger logger = LoggerFactory.getLogger(ControlCountryEndpoint.class);
 
   private final ControlCountryRepository oldRepository;
 
@@ -25,13 +28,13 @@ public class ControlCountryEndpoint {
   @ResponsePayload
   public GetCountryResponse getCountryV1(@RequestPayload final GetCountryRequest request) {
     final long start = currentTimeMillis();
-    System.out.println(">> Control start");
+    System.out.println("Control start");
 
     final GetCountryResponse response = new GetCountryResponse();
     oldRepository.findCountry(request.getName())
       .ifPresent(response::setCountry);
 
-    System.out.println(">> Control end " + (currentTimeMillis() - start));
+    logger.debug("Control end {}", (currentTimeMillis() - start));
     return response;
   }
 }

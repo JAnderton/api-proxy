@@ -1,6 +1,8 @@
 package me.karun.country.proxy;
 
 import org.apache.http.protocol.HTTP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 public class ProxyEndpoint {
 
   private final MetricsEngine metricEngine = new MetricsEngine();
+  private final Logger logger = LoggerFactory.getLogger(ProxyEndpoint.class);
 
   @RequestMapping(method = RequestMethod.GET, produces = MediaType.TEXT_XML_VALUE)
   @ResponseBody
@@ -52,14 +55,14 @@ public class ProxyEndpoint {
 
   private String evaluateSoapRequest(final ExperimentType type) throws IOException {
     final long start = currentTimeMillis();
-    System.out.println(">> Start calling " + type);
+    logger.debug("Start calling {}", type);
 
     final String response = SoapClient.testClient(String.format("http://localhost:%d/ws", type.getPort()))
       .withHeader(HTTP.CONTENT_TYPE, MediaType.TEXT_XML_VALUE)
       .post(inputFromFile())
       .process();
 
-    System.out.println(">> End calling " + type + ". Execution time = " + (currentTimeMillis() - start));
+    logger.debug("End calling {}. Execution time = {}", type, (currentTimeMillis() - start));
     return response;
   }
 
