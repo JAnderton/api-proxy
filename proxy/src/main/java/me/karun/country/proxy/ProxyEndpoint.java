@@ -5,9 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +22,18 @@ public class ProxyEndpoint {
   private final MetricsEngine metricEngine = new MetricsEngine();
   private final Logger logger = LoggerFactory.getLogger(ProxyEndpoint.class);
 
-  @RequestMapping(method = RequestMethod.GET, produces = MediaType.TEXT_XML_VALUE)
+  @RequestMapping(method = RequestMethod.POST, consumes = MediaType.TEXT_XML_VALUE, produces = MediaType.TEXT_XML_VALUE)
   @ResponseBody
-  public String proxyRequest() throws Exception {
-    return metricEngine.createExperiment("getCountry")
+  public String proxyRequest(@RequestBody final String body,
+                             @RequestHeader(value = "action", required = false) final String action,
+                             @RequestHeader(value = "SOAPAction", required = false) final String soapAction) throws Exception {
+    final SoapRequest soapRequest = new SoapRequest(body)
+      .addActionHeader(action)
+      .addSoapActionHeader(soapAction);
+    final String soapMethod = soapRequest.fetchSoapMethod();
+    logger.info("Request to {} method", soapMethod);
+
+    return metricEngine.createExperiment(soapMethod)
       .run(this::controlFunction, this::candidateFunction);
   }
 
@@ -57,7 +63,7 @@ public class ProxyEndpoint {
     final long start = currentTimeMillis();
     logger.debug("Start calling {}", type);
 
-    final String response = SoapClient.testClient(String.format("http://localhost:%d/ws", type.getPort()))
+    final String response = HttpClient.testClient(String.format("http://localhost:%d/ws", type.getPort()))
       .withHeader(HTTP.CONTENT_TYPE, MediaType.TEXT_XML_VALUE)
       .post(inputFromFile())
       .process();

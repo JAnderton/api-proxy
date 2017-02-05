@@ -12,26 +12,26 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-class SoapClient {
+class HttpClient {
   private final String serverUri;
   private final Map<String, String> headers;
   private String body;
 
-  private SoapClient(final String serverUri) {
+  private HttpClient(final String serverUri) {
     this.serverUri = serverUri;
     headers = new HashMap<>();
   }
 
-  static SoapClient testClient(final String serverUri) {
-    return new SoapClient(serverUri);
+  static HttpClient testClient(final String serverUri) {
+    return new HttpClient(serverUri);
   }
 
-  SoapClient withHeader(final String key, final String value) {
+  HttpClient withHeader(final String key, final String value) {
     headers.put(key, value);
     return this;
   }
 
-  SoapClient post(final String body) {
+  HttpClient post(final String body) {
     this.body = body;
     return this;
   }
